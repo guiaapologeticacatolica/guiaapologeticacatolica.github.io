@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema 2: El Primado de Pedro - Examen de Práctica</title>
+    <link rel="stylesheet" href="../../css/styles-examen.css">
+</head>
+<body>
+    <header>
+        <h1>Examen de Práctica</h1>
+        <p class="subtitle">Tema 2: El Primado de Pedro</p>
+    </header>
+
+    <nav>
+        <a href="guia-estudio.html">← Volver a la Guía de Estudio</a>
+    </nav>
+
+    <div class="progreso-container">
+        <div class="progreso-info">
+            <span>Pregunta <span id="numero-pregunta">1</span> de <span id="total-preguntas">20</span></span>
+            <span>Correctas: <span id="correctas">0</span> | Incorrectas: <span id="incorrectas">0</span></span>
+        </div>
+        <div class="barra-progreso">
+            <div class="barra-progreso-fill" id="barra-progreso"></div>
+        </div>
+    </div>
+
+    <main id="contenedor-examen">
+        <!-- Las preguntas se generarán dinámicamente aquí -->
+    </main>
+
+    <div id="resultado-final" class="resultado-final" style="display: none;">
+        <h2>¡Examen Completado!</h2>
+        <div class="estadisticas-finales">
+            <div class="stat-item">
+                <span class="stat-numero" id="total-correctas-final">0</span>
+                <span class="stat-label">Correctas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-numero" id="total-incorrectas-final">0</span>
+                <span class="stat-label">Incorrectas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-numero" id="porcentaje-final">0%</span>
+                <span class="stat-label">Calificación</span>
+            </div>
+        </div>
+        <div id="mensaje-final" class="mensaje-final"></div>
+        <div class="botones-finales">
+            <button onclick="reiniciarExamen()" class="btn-reiniciar">Reintentar Examen</button>
+            <a href="guia-estudio.html" class="btn-volver">Volver a la Guía</a>
+            <a href="../../index.html" class="btn-inicio">Ir al Inicio</a>
+        </div>
+    </div>
+
+    <script>
+        const preguntas = [
+            // Preguntas de Opción Múltiple (1-10)
+            {
+                id: 1,
+                tipo: "multiple",
+                pregunta: "¿Qué significa el nombre 'Pedro' que Jesús dio a Simón?",
+                opciones: [
+                    "Roca o piedra",
+                    "Pastor",
+                    "Pescador",
+                    "Líder"
+                ],
+                correcta: 0,
+                explicacion: "Jesús cambió el nombre de Simón a Pedro (del griego Petros y arameo Kepha), que significa 'roca' o 'piedra', prefigurando su papel como fundamento de la Iglesia."
+            },
+            {
+                id: 2,
+                tipo: "multiple",
+                pregunta: "Según Mateo 16:19, ¿qué le dio Jesús a Pedro?",
+                opciones: [
+                    "El poder de hacer milagros",
+                    "El libro de la vida",
+                    "Las llaves del reino de los cielos",
+                    "La espada del Espíritu"
+                ],
+                correcta: 2,
+                explicacion: "En Mateo 16:19, Jesús dice: 'A ti te daré las llaves del reino de los cielos', simbolizando la autoridad suprema sobre la Iglesia."
+            },
+            {
+                id: 3,
+                tipo: "multiple",
+                pregunta: "En Juan 21:15-17, ¿cuántas veces Jesús le pide a Pedro que apaciente sus ovejas?",
+                opciones: [
+                    "Una vez",
+                    "Dos veces",
+                    "Tres veces",
+                    "Siete veces"
+                ],
+                correcta: 2,
+                explicacion: "Jesús le pregunta tres veces a Pedro si lo ama, y tres veces le encomienda: 'Apacienta mis corderos/ovejas', restaurando la triple negación y confirmando su liderazgo pastoral."
+            },
+            {
+                id: 4,
+                tipo: "multiple",
+                pregunta: "¿Qué significa 'atar y desatar' en el contexto del poder dado a Pedro?",
+                opciones: [
+                    "Solo hacer milagros físicos",
+                    "Autoridad para absolver pecados y tomar decisiones doctrinales",
+                    "Únicamente predicar el evangelio",
+                    "Solamente bautizar creyentes"
+                ],
+                correcta: 1,
+                explicacion: "El poder de 'atar y desatar' (Mt 16:19) significa la autoridad para absolver pecados, pronunciar sentencias doctrinales y tomar decisiones disciplinares en la Iglesia (CIC 553)."
+            },
+            {
+                id: 5,
+                tipo: "multiple",
+                pregunta: "¿En qué libro del Antiguo Testamento encontramos la referencia a las 'llaves' como símbolo de autoridad?",
+                opciones: [
+                    "Génesis 22",
+                    "Isaías 22",
+                    "Ezequiel 22",
+                    "Daniel 22"
+                ],
+                correcta: 1,
+                explicacion: "Isaías 22:22 habla del mayordomo del reino davídico que recibe las llaves: 'Pondré la llave de la casa de David sobre su hombro'. Jesús usa esta misma imagen con Pedro."
+            },
+            {
+                id: 6,
+                tipo: "multiple",
+                pregunta: "En Lucas 22:31-32, ¿qué le pide Jesús a Pedro después de su restauración?",
+                opciones: [
+                    "Que predique a los gentiles",
+                    "Que vaya a Roma",
+                    "Que confirme a sus hermanos",
+                    "Que escriba un evangelio"
+                ],
+                correcta: 2,
+                explicacion: "Jesús dice: 'Y tú, cuando hayas vuelto, confirma a tus hermanos' (Lc 22:32). Este encargo de fortalecer la fe de los demás es fundamento de la infalibilidad papal."
+            },
+            {
+                id: 7,
+                tipo: "multiple",
+                pregunta: "¿Quién predicó el primer sermón el día de Pentecostés?",
+                opciones: [
+                    "Juan el apóstol",
+                    "Pedro",
+                    "Pablo",
+                    "Santiago"
+                ],
+                correcta: 1,
+                explicacion: "Hechos 2:14-41 narra cómo Pedro, poniéndose en pie con los once, predicó el primer sermón de la Iglesia en Pentecostés, convirtiendo a 3,000 personas."
+            },
+            {
+                id: 8,
+                tipo: "multiple",
+                pregunta: "¿En qué concilio Pedro resolvió la controversia sobre la circuncisión de los gentiles?",
+                opciones: [
+                    "Concilio de Antioquía",
+                    "Concilio de Éfeso",
+                    "Concilio de Jerusalén",
+                    "Concilio de Nicea"
+                ],
+                correcta: 2,
+                explicacion: "En el Concilio de Jerusalén (Hechos 15:7-11), Pedro se levanta y da su veredicto sobre la cuestión de los gentiles, después del cual 'toda la asamblea calló'."
+            },
+            {
+                id: 9,
+                tipo: "multiple",
+                pregunta: "Cuando Pablo fue a Jerusalén después de su conversión, ¿a quién fue específicamente a ver?",
+                opciones: [
+                    "A todos los apóstoles por igual",
+                    "A Pedro (Cefas)",
+                    "A Santiago solamente",
+                    "A Juan el apóstol"
+                ],
+                correcta: 1,
+                explicacion: "Gálatas 1:18 dice: 'Luego, pasados tres años, subí a Jerusalén para conocer a Cefas [Pedro], y permanecí quince días con él', mostrando el reconocimiento de su liderazgo."
+            },
+            {
+                id: 10,
+                tipo: "multiple",
+                pregunta: "¿Qué nombre código usaron los primeros cristianos para referirse a Roma en sus escritos?",
+                opciones: [
+                    "Egipto",
+                    "Sodoma",
+                    "Babilonia",
+                    "Asiria"
+                ],
+                correcta: 2,
+                explicacion: "Los cristianos usaban 'Babilonia' como código para Roma. Pedro escribe: 'Os saluda la que está en Babilonia' (1 Pe 5:13), indicando que escribía desde Roma."
+            },
+
+            // Preguntas Verdadero/Falso (11-20)
+            {
+                id: 11,
+                tipo: "verdadero-falso",
+                pregunta: "Pedro siempre aparece primero en las listas de los doce apóstoles en los Evangelios.",
+                correcta: true,
+                explicacion: "VERDADERO. En Mateo 10:2, Marcos 3:16 y Lucas 6:14, Pedro siempre encabeza la lista de apóstoles, siendo llamado incluso 'el primero' (Mt 10:2)."
+            },
+            {
+                id: 12,
+                tipo: "verdadero-falso",
+                pregunta: "Jesús dio las llaves del Reino a todos los apóstoles por igual.",
+                correcta: false,
+                explicacion: "FALSO. Solo a Pedro se le dieron las llaves del Reino (Mt 16:19). Aunque todos los apóstoles recibieron poder de atar y desatar (Mt 18:18), las llaves simbolizan autoridad suprema exclusiva de Pedro."
+            },
+            {
+                id: 13,
+                tipo: "verdadero-falso",
+                pregunta: "La palabra aramea que Jesús usó para Pedro fue 'Kepha', que significa roca.",
+                correcta: true,
+                explicacion: "VERDADERO. Jesús hablaba arameo y usó 'Kepha' (roca) tanto para el nombre de Pedro como para la piedra: 'Tú eres Kepha y sobre esta kepha edificaré mi Iglesia'."
+            },
+            {
+                id: 14,
+                tipo: "verdadero-falso",
+                pregunta: "La reprensión de Pablo a Pedro en Gálatas 2:11 niega el primado de Pedro.",
+                correcta: false,
+                explicacion: "FALSO. Pablo corrigió a Pedro en un asunto de conducta pastoral, no de doctrina. Pedro no es impecable, sino que tiene infalibilidad en materias de fe cuando enseña oficialmente."
+            },
+            {
+                id: 15,
+                tipo: "verdadero-falso",
+                pregunta: "El hecho de que Cristo sea la roca fundamental contradice que Pedro sea roca ministerial.",
+                correcta: false,
+                explicacion: "FALSO. Cristo es la roca por naturaleza (1 Cor 10:4), pero puede establecer a Pedro como roca ministerial. Así como Jesús es el Buen Pastor pero hace pastores a otros, es el fundamento pero llama a los apóstoles fundamento (Ef 2:20)."
+            },
+            {
+                id: 16,
+                tipo: "verdadero-falso",
+                pregunta: "Pedro tomó la iniciativa en elegir al sucesor de Judas antes de Pentecostés.",
+                correcta: true,
+                explicacion: "VERDADERO. Hechos 1:15-26 muestra a Pedro liderando a los 120 discípulos en la elección de Matías para reemplazar a Judas, demostrando su autoridad desde el inicio."
+            },
+            {
+                id: 17,
+                tipo: "verdadero-falso",
+                pregunta: "No existe evidencia histórica de que Pedro haya estado en Roma.",
+                correcta: false,
+                explicacion: "FALSO. El testimonio unánime de los Padres de la Iglesia (Clemente Romano año 95, Ignacio de Antioquía año 107, Ireneo año 180) confirma el episcopado y martirio de Pedro en Roma. Ningún cristiano antiguo lo disputó."
+            },
+            {
+                id: 18,
+                tipo: "verdadero-falso",
+                pregunta: "Jesús oró específicamente por Pedro para que su fe no desfallezca y pueda confirmar a los hermanos.",
+                correcta: true,
+                explicacion: "VERDADERO. Lucas 22:32 registra: 'Yo he rogado por ti, para que tu fe no desfallezca. Y tú, cuando hayas vuelto, confirma a tus hermanos'. Es fundamento de la infalibilidad papal."
+            },
+            {
+                id: 19,
+                tipo: "verdadero-falso",
+                pregunta: "La interpretación de que la 'roca' en Mateo 16:18 es solo la fe de Pedro tiene apoyo en los Padres de la Iglesia.",
+                correcta: false,
+                explicacion: "FALSO. Ningún Padre de la Iglesia de los primeros siglos interpretó este pasaje como refiriéndose solo a la fe. Esta interpretación es una innovación protestante del siglo XVI."
+            },
+            {
+                id: 20,
+                tipo: "verdadero-falso",
+                pregunta: "El primado de Pedro se transmite a sus sucesores, los obispos de Roma.",
+                correcta: true,
+                explicacion: "VERDADERO. El Catecismo enseña (CIC 881) que el oficio pastoral de Pedro pertenece a los cimientos de la Iglesia y se continúa por los obispos bajo el primado del Papa, sucesor de Pedro."
+            }
+        ];
+
+        let preguntaActual = 0;
+        let respuestasCorrectas = 0;
+        let respuestasIncorrectas = 0;
+        let respondida = false;
+
+        function inicializarExamen() {
+            document.getElementById('total-preguntas').textContent = preguntas.length;
+            mostrarPregunta();
+        }
+
+        function mostrarPregunta() {
+            if (preguntaActual >= preguntas.length) {
+                mostrarResultadoFinal();
+                return;
+            }
+
+            const pregunta = preguntas[preguntaActual];
+            respondida = false;
+            
+            const contenedor = document.getElementById('contenedor-examen');
+            
+            if (pregunta.tipo === 'multiple') {
+                contenedor.innerHTML = `
+                    <div class="pregunta-card">
+                        <h3>Pregunta ${preguntaActual + 1}</h3>
+                        <p class="pregunta-texto">${pregunta.pregunta}</p>
+                        <div class="opciones">
+                            ${pregunta.opciones.map((opcion, index) => `
+                                <button class="opcion-btn" onclick="seleccionarRespuesta(${index})">
+                                    <span class="opcion-letra">${String.fromCharCode(65 + index)}</span>
+                                    <span class="opcion-texto">${opcion}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="feedback" class="feedback"></div>
+                        <button id="btn-siguiente" class="btn-siguiente" onclick="siguientePregunta()" style="display: none;">
+                            Siguiente Pregunta →
+                        </button>
+                    </div>
+                `;
+            } else {
+                contenedor.innerHTML = `
+                    <div class="pregunta-card">
+                        <h3>Pregunta ${preguntaActual + 1}</h3>
+                        <p class="pregunta-texto">${pregunta.pregunta}</p>
+                        <div class="opciones">
+                            <button class="opcion-btn" onclick="seleccionarRespuesta(true)">
+                                <span class="opcion-letra">V</span>
+                                <span class="opcion-texto">Verdadero</span>
+                            </button>
+                            <button class="opcion-btn" onclick="seleccionarRespuesta(false)">
+                                <span class="opcion-letra">F</span>
+                                <span class="opcion-texto">Falso</span>
+                            </button>
+                        </div>
+                        <div id="feedback" class="feedback"></div>
+                        <button id="btn-siguiente" class="btn-siguiente" onclick="siguientePregunta()" style="display: none;">
+                            Siguiente Pregunta →
+                        </button>
+                    </div>
+                `;
+            }
+
+            actualizarProgreso();
+        }
+
+        function seleccionarRespuesta(respuesta) {
+            if (respondida) return;
+            
+            const pregunta = preguntas[preguntaActual];
+            const esCorrecto = respuesta === pregunta.correcta;
+            const feedback = document.getElementById('feedback');
+            const botones = document.querySelectorAll('.opcion-btn');
+            
+            respondida = true;
+            
+            botones.forEach((btn, index) => {
+                btn.disabled = true;
+                if (pregunta.tipo === 'multiple') {
+                    if (index === pregunta.correcta) {
+                        btn.classList.add('correcta');
+                    } else if (index === respuesta) {
+                        btn.classList.add('incorrecta');
+                    }
+                } else {
+                    const valor = index === 0 ? true : false;
+                    if (valor === pregunta.correcta) {
+                        btn.classList.add('correcta');
+                    } else if (valor === respuesta) {
+                        btn.classList.add('incorrecta');
+                    }
+                }
+            });
+
+            if (esCorrecto) {
+                respuestasCorrectas++;
+                feedback.className = 'feedback correcto';
+                feedback.innerHTML = `
+                    <strong>✓ ¡Correcto!</strong>
+                    <p>${pregunta.explicacion}</p>
+                `;
+            } else {
+                respuestasIncorrectas++;
+                feedback.className = 'feedback incorrecto';
+                feedback.innerHTML = `
+                    <strong>✗ Incorrecto</strong>
+                    <p>${pregunta.explicacion}</p>
+                `;
+            }
+
+            feedback.style.display = 'block';
+            document.getElementById('btn-siguiente').style.display = 'block';
+            actualizarEstadisticas();
+        }
+
+        function siguientePregunta() {
+            preguntaActual++;
+            mostrarPregunta();
+        }
+
+        function actualizarProgreso() {
+            document.getElementById('numero-pregunta').textContent = preguntaActual + 1;
+            const porcentaje = ((preguntaActual + 1) / preguntas.length) * 100;
+            document.getElementById('barra-progreso').style.width = porcentaje + '%';
+        }
+
+        function actualizarEstadisticas() {
+            document.getElementById('correctas').textContent = respuestasCorrectas;
+            document.getElementById('incorrectas').textContent = respuestasIncorrectas;
+        }
+
+        function mostrarResultadoFinal() {
+            document.getElementById('contenedor-examen').style.display = 'none';
+            document.querySelector('.progreso-container').style.display = 'none';
+            
+            const porcentaje = Math.round((respuestasCorrectas / preguntas.length) * 100);
+            
+            document.getElementById('total-correctas-final').textContent = respuestasCorrectas;
+            document.getElementById('total-incorrectas-final').textContent = respuestasIncorrectas;
+            document.getElementById('porcentaje-final').textContent = porcentaje + '%';
+            
+            const mensajeFinal = document.getElementById('mensaje-final');
+            if (porcentaje >= 90) {
+                mensajeFinal.innerHTML = '<p class="excelente">¡Excelente! Dominas muy bien el tema del Primado de Pedro.</p>';
+            } else if (porcentaje >= 70) {
+                mensajeFinal.innerHTML = '<p class="bueno">¡Buen trabajo! Tienes un conocimiento sólido del tema.</p>';
+            } else if (porcentaje >= 50) {
+                mensajeFinal.innerHTML = '<p class="regular">Bien, pero te recomendamos repasar la guía de estudio.</p>';
+            } else {
+                mensajeFinal.innerHTML = '<p class="necesita-mejorar">Te recomendamos estudiar nuevamente el tema antes de continuar.</p>';
+            }
+            
+            document.getElementById('resultado-final').style.display = 'block';
+        }
+
+        function reiniciarExamen() {
+            preguntaActual = 0;
+            respuestasCorrectas = 0;
+            respuestasIncorrectas = 0;
+            respondida = false;
+            
+            document.getElementById('contenedor-examen').style.display = 'block';
+            document.querySelector('.progreso-container').style.display = 'block';
+            document.getElementById('resultado-final').style.display = 'none';
+            
+            actualizarEstadisticas();
+            mostrarPregunta();
+        }
+
+        // Inicializar al cargar
+        window.onload = inicializarExamen;
+    </script>
+</body>
+</html>
