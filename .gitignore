@@ -1,0 +1,22 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~
+
+# Carpetas de IDEs
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log
+
+# Archivos de Google Drive (si hay sincronización)
+.~lock.*
+~$*

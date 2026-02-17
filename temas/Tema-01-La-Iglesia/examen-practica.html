@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Práctica - La Iglesia</title>
+    <link rel="stylesheet" href="../../css/styles-examen.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✍️ Examen de Práctica</h1>
+            <p>Tema 1: La Iglesia</p>
+        </header>
+        
+        <div class="content">
+            <!-- INSTRUCCIONES -->
+            <div class="instrucciones">
+                <h3>📋 Instrucciones:</h3>
+                <ul>
+                    <li>Lee cuidadosamente cada pregunta antes de responder</li>
+                    <li>Haz clic en la opción que consideres correcta</li>
+                    <li>Recibirás retroalimentación inmediata sobre tu respuesta</li>
+                    <li>Lee las explicaciones para reforzar tu aprendizaje</li>
+                    <li>Al finalizar, podrás ver tu calificación total</li>
+                </ul>
+            </div>
+            
+            <!-- PROGRESO -->
+            <div class="progreso">
+                <h3>📊 Tu Progreso</h3>
+                <div class="progreso-bar">
+                    <div class="progreso-fill" id="progresoFill">0%</div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="respondidas">0</div>
+                        <div class="stat-label">Respondidas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="correctas" style="color: #4CAF50;">0</div>
+                        <div class="stat-label">Correctas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="incorrectas" style="color: #f44336;">0</div>
+                        <div class="stat-label">Incorrectas</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PREGUNTAS -->
+            <div id="preguntas">
+                <!-- Las preguntas se generarán con JavaScript -->
+            </div>
+            
+            <!-- RESULTADO FINAL -->
+            <div class="resultado-final" id="resultadoFinal">
+                <div class="icono-resultado" id="iconoResultado">🎉</div>
+                <h2>¡Examen Completado!</h2>
+                <div class="resultado-porcentaje" id="porcentajeFinal">0%</div>
+                <div class="resultado-mensaje" id="mensajeFinal"></div>
+                <div class="botones-control">
+                    <button class="btn btn-reiniciar" onclick="reiniciarExamen()">🔄 Reiniciar Examen</button>
+                    <a href="guia-estudio.html" class="btn btn-guia">📖 Volver a la Guía</a>
+                    <a href="../../index.html" class="btn">🏠 Inicio</a>
+                </div>
+            </div>
+            
+            <!-- BOTONES DE CONTROL -->
+            <div class="botones-control">
+                <a href="guia-estudio.html" class="btn btn-guia">📖 Volver a la Guía</a>
+                <button class="btn btn-reiniciar" onclick="reiniciarExamen()">🔄 Reiniciar</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Base de datos de preguntas
+        const preguntas = [
+            // OPCIÓN MÚLTIPLE
+            {
+                tipo: "multiple",
+                pregunta: "¿Cuál es la promesa principal de Cristo sobre la Iglesia en Mateo 16:18?",
+                opciones: [
+                    "Que la Iglesia nunca tendrá problemas",
+                    "Que las puertas del Hades no prevalecerán contra ella",
+                    "Que todos los cristianos serán santos",
+                    "Que la Iglesia será invisible"
+                ],
+                correcta: 1,
+                explicacion: "En Mateo 16:18, Jesús promete que 'las puertas del Hades no prevalecerán contra ella'. Esta es la garantía de indefectibilidad de la Iglesia, asegurando que nunca será destruida ni se apartará completamente de la verdad."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "¿Qué significa que la Iglesia es 'apostólica'?",
+                opciones: [
+                    "Que fue fundada en el siglo de los apóstoles",
+                    "Que tiene sucesión continua desde los apóstoles",
+                    "Que solo los apóstoles pueden ser salvos",
+                    "Que ya no necesita líderes"
+                ],
+                correcta: 1,
+                explicacion: "La apostolicidad significa que la Iglesia mantiene una sucesión ininterrumpida desde los apóstoles hasta los obispos actuales, preservando la fe apostólica original y la autoridad para enseñar, santificar y gobernar."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "Según 1 Timoteo 3:15, ¿qué es la Iglesia?",
+                opciones: [
+                    "Un edificio donde nos reunimos",
+                    "Columna y fundamento de la verdad",
+                    "Una organización humana",
+                    "Solo un grupo de amigos"
+                ],
+                correcta: 1,
+                explicacion: "San Pablo llama a la Iglesia 'columna y fundamento de la verdad' en 1 Timoteo 3:15, destacando su papel esencial en preservar y transmitir la verdad revelada por Dios."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "¿Cuántas iglesias fundó Cristo según la Biblia?",
+                opciones: [
+                    "Muchas, para que cada quien elija",
+                    "Una sola Iglesia",
+                    "Diferentes iglesias para diferentes países",
+                    "No fundó ninguna iglesia visible"
+                ],
+                correcta: 1,
+                explicacion: "Cristo fundó una sola Iglesia. En Efesios 4:4-6 se enfatiza 'un solo Cuerpo, un solo Espíritu, una sola fe, un solo bautismo'. La división en múltiples denominaciones contradice el plan divino de unidad."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "¿Qué simbolizan las 'llaves del Reino' entregadas a Pedro en Mateo 16:19?",
+                opciones: [
+                    "Solo un símbolo sin significado real",
+                    "Autoridad suprema sobre la Iglesia",
+                    "Las llaves de una casa física",
+                    "Un título honorífico sin poder"
+                ],
+                correcta: 1,
+                explicacion: "Las llaves simbolizan autoridad suprema, similar a Isaías 22:22 donde el mayordomo recibe las llaves del reino. Cristo entrega a Pedro la autoridad para gobernar su Iglesia en la tierra."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "¿Cuál de las siguientes NO es una de las cuatro notas (características) de la Iglesia?",
+                opciones: [
+                    "Una",
+                    "Santa",
+                    "Rica",
+                    "Apostólica"
+                ],
+                correcta: 2,
+                explicacion: "Las cuatro notas de la Iglesia según el Credo Niceno son: Una, Santa, Católica y Apostólica. Estas características fueron prometidas por Cristo y son verificables en la historia de la Iglesia."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "¿Qué hicieron los apóstoles cuando Judas abandonó su cargo según Hechos 1:20-26?",
+                opciones: [
+                    "Dejaron el cargo vacío permanentemente",
+                    "Eligieron a Matías para reemplazarlo",
+                    "Decidieron que ya no se necesitaban apóstoles",
+                    "Esperaron que Cristo designara a alguien directamente"
+                ],
+                correcta: 1,
+                explicacion: "Los apóstoles eligieron a Matías para ocupar el cargo de Judas, estableciendo el principio de sucesión apostólica. Esto muestra que el ministerio apostólico debía continuar y no quedarse vacante."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "Según 2 Timoteo 2:2, ¿a quiénes debe Pablo transmitir lo que enseñó?",
+                opciones: [
+                    "A nadie, que cada quien lea la Biblia",
+                    "A hombres fieles que puedan instruir a otros",
+                    "Solo a los que tienen el Espíritu Santo",
+                    "A cualquier persona sin distinción"
+                ],
+                correcta: 1,
+                explicacion: "Pablo instruye transmitir la enseñanza 'a hombres fieles que sean capaces, a su vez, de instruir a otros'. Esta es la cadena de sucesión apostólica: Pablo → Timoteo → hombres fieles → otros."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "¿Qué promete Jesús en Juan 14:16-17 sobre el Espíritu Santo?",
+                opciones: [
+                    "Que vendría solo por unos años",
+                    "Que estaría con los apóstoles para siempre",
+                    "Que solo vendría en Pentecostés",
+                    "Que cada persona lo recibiría directamente sin la Iglesia"
+                ],
+                correcta: 1,
+                explicacion: "Jesús promete que el Espíritu Santo estará con la Iglesia 'para siempre', garantizando su guía continua en la verdad. Esta promesa asegura la asistencia divina perpetua a la Iglesia."
+            },
+            {
+                tipo: "multiple",
+                pregunta: "¿Qué significa la indefectibilidad de la Iglesia?",
+                opciones: [
+                    "Que todos sus miembros son perfectos",
+                    "Que nunca se apartará completamente de la verdad",
+                    "Que no comete ningún error nunca",
+                    "Que es invisible y espiritual"
+                ],
+                correcta: 1,
+                explicacion: "La indefectibilidad significa que la Iglesia como institución nunca se apartará completamente de la verdad ni será destruida. No significa que cada miembro sea perfecto, sino que la doctrina y misión permanecen fieles a Cristo."
+            },
+            
+            // VERDADERO O FALSO
+            {
+                tipo: "verdadero-falso",
+                pregunta: "La Iglesia Católica enseña que fue fundada directamente por Jesucristo durante su ministerio terrenal.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 0,
+                explicacion: "VERDADERO. La Iglesia Católica fue instituida directamente por Cristo, quien eligió a los apóstoles, les dio autoridad y prometió estar con ellos 'hasta el fin del mundo' (Mateo 28:20)."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "Las 'puertas del Hades' en Mateo 16:18 se refieren solamente a los edificios de las iglesias.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 1,
+                explicacion: "FALSO. Las 'puertas del Hades' representan las fuerzas del mal y la muerte que intentarán destruir la Iglesia. Cristo promete que estas fuerzas nunca prevalecerán contra su Iglesia."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "La sucesión apostólica puede ser verificada históricamente desde los apóstoles hasta los obispos actuales.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 0,
+                explicacion: "VERDADERO. Existen registros históricos detallados que trazan la línea de sucesión de obispos desde los tiempos apostólicos. Por ejemplo, San Ireneo de Lyon (siglo II) ya documentaba las sucesiones de las principales sedes."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "Según Efesios 4:4-6, hay muchos cuerpos (iglesias) y muchas fes diferentes que son todas válidas.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 1,
+                explicacion: "FALSO. Efesios 4:4-6 enseña claramente 'un solo Cuerpo, un solo Espíritu, una sola fe, un solo bautismo'. La división en múltiples denominaciones contradice esta enseñanza bíblica."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "La Iglesia es santa porque todos sus miembros son perfectos y nunca pecan.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 1,
+                explicacion: "FALSO. La Iglesia es santa por su Fundador (Cristo), sus doctrinas y sacramentos, no porque todos sus miembros sean perfectos. Jesús predijo que habría pecadores en la Iglesia (parábola del trigo y la cizaña, Mateo 13:24-30)."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "Jesús prometió estar con sus apóstoles solo hasta su ascensión al cielo.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 1,
+                explicacion: "FALSO. En Mateo 28:20, Jesús promete 'Yo estoy con vosotros todos los días hasta el fin del mundo', indicando su presencia continua en la Iglesia a través de los sucesores de los apóstoles."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "La palabra 'católica' significa 'universal'.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 0,
+                explicacion: "VERDADERO. 'Católica' viene del griego 'katholikos' que significa 'universal'. La Iglesia es católica porque está destinada a todos los pueblos y naciones, tal como Cristo mandó en la Gran Comisión."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "San Pablo llama a la Biblia 'columna y fundamento de la verdad' en 1 Timoteo 3:15.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 1,
+                explicacion: "FALSO. Pablo llama a la IGLESIA 'columna y fundamento de la verdad', no a la Biblia. Esto muestra el papel esencial de la Iglesia en preservar y transmitir la verdad revelada."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "La idea de una iglesia puramente invisible se encuentra en la enseñanza de los apóstoles.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 1,
+                explicacion: "FALSO. La idea de una iglesia invisible surgió durante la Reforma protestante, no en la enseñanza apostólica. La Biblia describe a la Iglesia con términos visibles: ciudad en un monte, con líderes designados y autoridad visible."
+            },
+            {
+                tipo: "verdadero-falso",
+                pregunta: "Según el Catecismo, la Iglesia Católica subsiste en la Iglesia gobernada por el sucesor de Pedro y los obispos en comunión con él.",
+                opciones: ["Verdadero", "Falso"],
+                correcta: 0,
+                explicacion: "VERDADERO. El CIC 816 enseña que 'la única Iglesia de Cristo subsiste en la Iglesia católica, gobernada por el sucesor de Pedro y por los obispos en comunión con él', basándose en Lumen Gentium del Concilio Vaticano II."
+            }
+        ];
+        
+        let estadisticas = {
+            respondidas: 0,
+            correctas: 0,
+            incorrectas: 0
+        };
+        
+        // Función para renderizar las preguntas
+        function renderizarPreguntas() {
+            const contenedor = document.getElementById('preguntas');
+            contenedor.innerHTML = '';
+            
+            preguntas.forEach((pregunta, index) => {
+                const preguntaDiv = document.createElement('div');
+                preguntaDiv.className = 'pregunta';
+                preguntaDiv.id = `pregunta-${index}`;
+                
+                const tipoLabel = pregunta.tipo === 'multiple' ? '📝 Opción Múltiple' : '✓ Verdadero/Falso';
+                
+                preguntaDiv.innerHTML = `
+                    <div class="pregunta-header">
+                        <span class="pregunta-numero">Pregunta ${index + 1}</span>
+                        <span class="pregunta-tipo">${tipoLabel}</span>
+                    </div>
+                    <div class="pregunta-texto">${pregunta.pregunta}</div>
+                    <div class="opciones" id="opciones-${index}">
+                        ${pregunta.opciones.map((opcion, i) => `
+                            <div class="opcion" onclick="seleccionarRespuesta(${index}, ${i})">
+                                <div class="opcion-letra">${String.fromCharCode(65 + i)}</div>
+                                <div>${opcion}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explicacion" id="explicacion-${index}">
+                        <h4>💡 Explicación:</h4>
+                        <div class="explicacion-texto">${pregunta.explicacion}</div>
+                    </div>
+                `;
+                
+                contenedor.appendChild(preguntaDiv);
+            });
+        }
+        
+        // Función para seleccionar una respuesta
+        function seleccionarRespuesta(preguntaIndex, opcionIndex) {
+            const pregunta = preguntas[preguntaIndex];
+            const preguntaDiv = document.getElementById(`pregunta-${preguntaIndex}`);
+            const opciones = preguntaDiv.querySelectorAll('.opcion');
+            
+            // Si ya fue respondida, no hacer nada
+            if (preguntaDiv.classList.contains('respondida')) {
+                return;
+            }
+            
+            // Marcar como respondida
+            preguntaDiv.classList.add('respondida');
+            estadisticas.respondidas++;
+            
+            // Verificar si es correcta
+            const esCorrecta = opcionIndex === pregunta.correcta;
+            
+            if (esCorrecta) {
+                estadisticas.correctas++;
+                preguntaDiv.classList.add('correcta');
+                opciones[opcionIndex].classList.add('correcta');
+            } else {
+                estadisticas.incorrectas++;
+                preguntaDiv.classList.add('incorrecta');
+                opciones[opcionIndex].classList.add('incorrecta');
+                // Mostrar también la correcta
+                opciones[pregunta.correcta].classList.add('correcta');
+            }
+            
+            // Marcar opción como seleccionada
+            opciones[opcionIndex].classList.add('seleccionada');
+            
+            // Deshabilitar todas las opciones
+            opciones.forEach(opcion => opcion.classList.add('disabled'));
+            
+            // Mostrar explicación
+            document.getElementById(`explicacion-${preguntaIndex}`).classList.add('mostrar');
+            
+            // Actualizar estadísticas
+            actualizarEstadisticas();
+            
+            // Verificar si completó el examen
+            if (estadisticas.respondidas === preguntas.length) {
+                setTimeout(mostrarResultadoFinal, 1000);
+            }
+        }
+        
+        // Actualizar estadísticas visuales
+        function actualizarEstadisticas() {
+            document.getElementById('respondidas').textContent = estadisticas.respondidas;
+            document.getElementById('correctas').textContent = estadisticas.correctas;
+            document.getElementById('incorrectas').textContent = estadisticas.incorrectas;
+            
+            const porcentaje = (estadisticas.respondidas / preguntas.length) * 100;
+            const fill = document.getElementById('progresoFill');
+            fill.style.width = porcentaje + '%';
+            fill.textContent = Math.round(porcentaje) + '%';
+        }
+        
+        // Mostrar resultado final
+        function mostrarResultadoFinal() {
+            const porcentaje = Math.round((estadisticas.correctas / preguntas.length) * 100);
+            const resultadoDiv = document.getElementById('resultadoFinal');
+            const porcentajeFinal = document.getElementById('porcentajeFinal');
+            const mensajeFinal = document.getElementById('mensajeFinal');
+            const iconoResultado = document.getElementById('iconoResultado');
+            
+            porcentajeFinal.textContent = porcentaje + '%';
+            
+            let mensaje = '';
+            let icono = '';
+            
+            if (porcentaje >= 90) {
+                mensaje = '¡Excelente! Dominas muy bien el tema de la Iglesia. 🌟';
+                icono = '🏆';
+            } else if (porcentaje >= 75) {
+                mensaje = '¡Muy bien! Tienes un buen conocimiento del tema. Repasa las preguntas incorrectas. 👏';
+                icono = '⭐';
+            } else if (porcentaje >= 60) {
+                mensaje = 'Buen esfuerzo. Te recomendamos repasar la guía de estudio y volver a intentarlo. 📚';
+                icono = '📖';
+            } else {
+                mensaje = 'Necesitas estudiar más el tema. Vuelve a la guía de estudio y practica nuevamente. 💪';
+                icono = '📝';
+            }
+            
+            mensajeFinal.textContent = mensaje;
+            iconoResultado.textContent = icono;
+            resultadoDiv.classList.add('mostrar');
+            
+            // Scroll al resultado
+            resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Reiniciar examen
+        function reiniciarExamen() {
+            estadisticas = {
+                respondidas: 0,
+                correctas: 0,
+                incorrectas: 0
+            };
+            
+            document.getElementById('resultadoFinal').classList.remove('mostrar');
+            actualizarEstadisticas();
+            renderizarPreguntas();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Inicializar al cargar la página
+        window.onload = function() {
+            renderizarPreguntas();
+        };
+    </script>
+</body>
+</html>

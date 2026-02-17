@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa de Estudio - Apologética Católica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .intro {
+            padding: 40px;
+            background: #f8f9fa;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .intro h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+        
+        .intro p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .temas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            padding: 40px;
+        }
+        
+        .tema-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .tema-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+        
+        .tema-card.disponible {
+            border-color: #4CAF50;
+        }
+        
+        .tema-card.proximo {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .tema-numero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .tema-card.disponible .tema-numero {
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+        }
+        
+        .tema-titulo {
+            font-size: 1.4em;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .tema-descripcion {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        
+        .tema-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .badge-disponible {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .badge-proximo {
+            background: #fff9c4;
+            color: #f57c00;
+        }
+        
+        .tema-botones {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s;
+            display: block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-examen {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .btn-examen:hover {
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .progreso-general {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            border-top: 3px solid #667eea;
+        }
+        
+        .progreso-general h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+        
+        .barra-progreso {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .barra-fill {
+            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+            height: 100%;
+            width: 5.88%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            font-size: 0.95em;
+            color: #666;
+        }
+        
+        footer {
+            background: #1e3c72;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .temas-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✝️ Apologética Católica</h1>
+            <p>Programa Completo de Estudio</p>
+        </header>
+        
+        <div class="intro">
+            <h2>🎯 Bienvenido al Programa de Estudio</h2>
+            <p>
+                Este programa está diseñado para ayudarte a profundizar en tu conocimiento de la fe católica 
+                y desarrollar habilidades de apologética. Cada tema incluye una guía de estudio completa con 
+                fundamentos teológicos, citas bíblicas y un examen de práctica interactivo.
+            </p>
+            <p>
+                <strong>📚 Nivel Actual:</strong> Básico (próximamente disponibles versiones Intermedia y Avanzada)
+            </p>
+        </div>
+        
+        <div class="progreso-general">
+            <h3>📊 Progreso General del Programa</h3>
+            <div class="barra-progreso">
+                <div class="barra-fill">1/17</div>
+            </div>
+            <div class="stats">
+                <span>✅ <strong>1</strong> tema completado</span>
+                <span>📝 <strong>16</strong> temas pendientes</span>
+                <span>🎯 <strong>5.88%</strong> del programa</span>
+            </div>
+        </div>
+        
+        <div class="temas-grid">
+            <!-- TEMA 1 - DISPONIBLE -->
+            <div class="tema-card disponible">
+                <span class="tema-badge badge-disponible">✅ Disponible</span>
+                <div class="tema-numero">1</div>
+                <div class="tema-titulo">La Iglesia</div>
+                <div class="tema-descripcion">
+                    Fundamentos bíblicos e históricos de la Iglesia Católica, su indefectibilidad, 
+                    sucesión apostólica y las cuatro notas. Incluye 20 preguntas de práctica.
+                </div>
+                <div class="tema-botones">
+                    <a href="temas/Tema-01-La-Iglesia/guia-estudio.html" class="btn">📖 Guía de Estudio</a>
+                    <a href="temas/Tema-01-La-Iglesia/examen-practica.html" class="btn btn-examen">✍️ Examen</a>
+                </div>
+            </div>
+            
+            <!-- TEMA 2 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">2</div>
+                <div class="tema-titulo">El Primado de Pedro</div>
+                <div class="tema-descripcion">
+                    El fundamento bíblico del papado, la autoridad de Pedro y su transmisión 
+                    a través de la historia de la Iglesia.
+                </div>
+            </div>
+            
+            <!-- TEMA 3 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">3</div>
+                <div class="tema-titulo">La Santísima Trinidad</div>
+                <div class="tema-descripcion">
+                    La doctrina de la Trinidad en la Biblia y en la Iglesia primitiva, 
+                    fundamentos teológicos y dogmáticos.
+                </div>
+            </div>
+            
+            <!-- TEMA 4 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">4</div>
+                <div class="tema-titulo">Justificación y Salvación</div>
+                <div class="tema-descripcion">
+                    Gracia, libertad, salvación por fe y obras, voluntad salvífica de Dios 
+                    y enseñanza patrística.
+                </div>
+            </div>
+            
+            <!-- TEMA 5 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">5</div>
+                <div class="tema-titulo">Sola Escritura</div>
+                <div class="tema-descripcion">
+                    Biblia, Magisterio y Tradición versus la Sola Escritura protestante. 
+                    Origen y consecuencias de esta doctrina.
+                </div>
+            </div>
+            
+            <!-- TEMA 6 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">6</div>
+                <div class="tema-titulo">Escatología</div>
+                <div class="tema-descripcion">
+                    El Purgatorio, la inmortalidad del alma, el infierno en la Biblia 
+                    y los Padres de la Iglesia.
+                </div>
+            </div>
+            
+            <!-- TEMA 7 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">7</div>
+                <div class="tema-titulo">Los Sacramentos</div>
+                <div class="tema-descripcion">
+                    La Eucaristía, el sacramento de la penitencia, el bautismo de niños 
+                    y fundamentos bíblicos e históricos.
+                </div>
+            </div>
+            
+            <!-- TEMA 8 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">8</div>
+                <div class="tema-titulo">La Comunión de los Santos</div>
+                <div class="tema-descripcion">
+                    La intercesión de los santos en la Biblia y en la Iglesia primitiva, 
+                    fundamento teológico.
+                </div>
+            </div>
+            
+            <!-- TEMA 9 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">9</div>
+                <div class="tema-titulo">La Virgen María</div>
+                <div class="tema-descripcion">
+                    Virginidad perpetua, Inmaculada Concepción, Asunción, y veneración 
+                    mariana en la historia.
+                </div>
+            </div>
+            
+            <!-- TEMA 10 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">10</div>
+                <div class="tema-titulo">Las Sagradas Imágenes</div>
+                <div class="tema-descripcion">
+                    Respuesta a la acusación de idolatría, fundamentos bíblicos del uso 
+                    de imágenes sagradas.
+                </div>
+            </div>
+            
+            <!-- TEMA 11 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">11</div>
+                <div class="tema-titulo">La Ramera de Babilonia</div>
+                <div class="tema-descripcion">
+                    ¿Es la Iglesia Católica la ramera de Babilonia? Análisis exegético 
+                    del Apocalipsis.
+                </div>
+            </div>
+            
+            <!-- TEMA 12 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">12</div>
+                <div class="tema-titulo">El Celibato Sacerdotal</div>
+                <div class="tema-descripcion">
+                    Análisis de las objeciones contra el celibato sacerdotal, fundamentos 
+                    bíblicos y teológicos.
+                </div>
+            </div>
+            
+            <!-- TEMA 13 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">13</div>
+                <div class="tema-titulo">Sábado o Domingo</div>
+                <div class="tema-descripcion">
+                    El día del Señor en la Iglesia primitiva, el cambio del sábado al domingo 
+                    y enseñanza patrística.
+                </div>
+            </div>
+            
+            <!-- TEMA 14 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">14</div>
+                <div class="tema-titulo">Protestantismo y Sectas</div>
+                <div class="tema-descripcion">
+                    Lógica protestante versus católica, definición de secta, análisis de 
+                    los Testigos de Jehová.
+                </div>
+            </div>
+            
+            <!-- TEMA 15 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">15</div>
+                <div class="tema-titulo">La Justicia Divina</div>
+                <div class="tema-descripcion">
+                    El castigo divino, cómo entender correctamente la doctrina, objeciones 
+                    comunes y respuestas.
+                </div>
+            </div>
+            
+            <!-- TEMA 16 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">16</div>
+                <div class="tema-titulo">Ateísmo</div>
+                <div class="tema-descripcion">
+                    Cómo se demuestra la existencia de Dios, argumentos filosóficos y 
+                    teológicos clásicos.
+                </div>
+            </div>
+            
+            <!-- TEMA 17 - PRÓXIMAMENTE -->
+            <div class="tema-card proximo">
+                <span class="tema-badge badge-proximo">🔜 Próximamente</span>
+                <div class="tema-numero">17</div>
+                <div class="tema-titulo">Temas Varios</div>
+                <div class="tema-descripcion">
+                    Ecumenismo, buenas obras de la Iglesia, respuesta a "Cristo no es religión" 
+                    y otros temas.
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>
+                📚 Material basado en el programa de estudio de 
+                <a href="https://apologeticacatolica.org/varios/Aprende-apologetica-catolica-programa-de-estudio/" 
+                   target="_blank">ApologeticaCatolica.org</a>
+            </p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
+                "Estad siempre prontos para dar razón de vuestra esperanza a todo el que os la pidiere" 
+                - 1 Pedro 3:15
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
