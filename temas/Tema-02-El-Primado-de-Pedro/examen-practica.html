@@ -31,7 +31,7 @@
             <div class="progreso">
                 <div class="progreso-header">
                     <span>Pregunta <span id="pregunta-actual">0</span> de 20</span>
-                    <span>Correctas: <span id="correctas-stat">0</span> | Incorrectas: <span id="incorrectas-stat">0</span></span>
+                    <span>Correctas: <span id="correctas">0</span> | Incorrectas: <span id="incorrectas">0</span></span>
                 </div>
                 <div class="progreso-barra">
                     <div class="progreso-fill" id="progresoFill"></div>
@@ -39,9 +39,7 @@
             </div>
             
             <!-- CONTENEDOR DE PREGUNTAS -->
-            <div id="preguntas">
-                <!-- Las preguntas se generarán dinámicamente aquí -->
-            </div>
+            <div id="pregunta-container"></div>
             
             <!-- RESULTADO FINAL -->
             <div class="resultado-final" id="resultadoFinal">
@@ -54,12 +52,6 @@
                     <a href="guia-estudio.html" class="btn btn-guia">📖 Volver a la Guía</a>
                     <a href="../../index.html" class="btn">🏠 Inicio</a>
                 </div>
-            </div>
-            
-            <!-- BOTONES DE CONTROL -->
-            <div class="botones-control">
-                <a href="guia-estudio.html" class="btn btn-guia">📖 Volver a la Guía</a>
-                <button class="btn btn-reiniciar" onclick="reiniciarExamen()">🔄 Reiniciar</button>
             </div>
         </div>
     </div>
@@ -251,152 +243,136 @@
             }
         ];
 
-        // Estado del examen
-        let estadisticas = {
-            respondidas: 0,
-            correctas: 0,
-            incorrectas: 0
-        };
-        
-        // Renderizar todas las preguntas
-        function renderizarPreguntas() {
-            const contenedor = document.getElementById('preguntas');
-            contenedor.innerHTML = '';
-            
-            preguntas.forEach((pregunta, index) => {
-                const preguntaDiv = document.createElement('div');
-                preguntaDiv.className = 'pregunta';
-                preguntaDiv.id = `pregunta-${index}`;
-                
-                if (pregunta.tipo === 'multiple') {
-                    preguntaDiv.innerHTML = `
-                        <h3>Pregunta ${index + 1} de ${preguntas.length}</h3>
-                        <p class="pregunta-texto">${pregunta.pregunta}</p>
-                        <div class="opciones">
-                            ${pregunta.opciones.map((opcion, i) => `
-                                <div class="opcion" onclick="seleccionarRespuesta(${index}, ${i})">
-                                    <div class="opcion-letra">${String.fromCharCode(65 + i)}</div>
-                                    <div>${opcion}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="explicacion" id="explicacion-${index}">
-                            <h4>💡 Explicación:</h4>
-                            <div class="explicacion-texto">${pregunta.explicacion}</div>
-                        </div>
-                    `;
-                } else {
-                    // Verdadero/Falso
-                    preguntaDiv.innerHTML = `
-                        <h3>Pregunta ${index + 1} de ${preguntas.length}</h3>
-                        <p class="pregunta-texto">${pregunta.pregunta}</p>
-                        <div class="opciones">
-                            <div class="opcion" onclick="seleccionarRespuesta(${index}, true)">
-                                <div class="opcion-letra">V</div>
-                                <div>Verdadero</div>
-                            </div>
-                            <div class="opcion" onclick="seleccionarRespuesta(${index}, false)">
-                                <div class="opcion-letra">F</div>
-                                <div>Falso</div>
-                            </div>
-                        </div>
-                        <div class="explicacion" id="explicacion-${index}">
-                            <h4>💡 Explicación:</h4>
-                            <div class="explicacion-texto">${pregunta.explicacion}</div>
-                        </div>
-                    `;
-                }
-                
-                contenedor.appendChild(preguntaDiv);
-            });
-        }
-        
-        // Función para seleccionar una respuesta
-        function seleccionarRespuesta(preguntaIndex, respuesta) {
-            const pregunta = preguntas[preguntaIndex];
-            const preguntaDiv = document.getElementById(`pregunta-${preguntaIndex}`);
-            const opciones = preguntaDiv.querySelectorAll('.opcion');
-            
-            // Si ya fue respondida, no hacer nada
-            if (preguntaDiv.classList.contains('respondida')) {
+        let indicePreguntaActual = 0;
+        let respuestasCorrectas = 0;
+        let respuestasIncorrectas = 0;
+        let preguntaRespondida = false;
+
+        function mostrarPregunta() {
+            if (indicePreguntaActual >= preguntas.length) {
+                mostrarResultadoFinal();
                 return;
             }
-            
-            // Marcar como respondida
-            preguntaDiv.classList.add('respondida');
-            estadisticas.respondidas++;
-            
-            // Verificar si es correcta
-            let esCorrecta;
-            let respuestaIndex;
-            
-            if (pregunta.tipo === 'multiple') {
-                esCorrecta = respuesta === pregunta.correcta;
-                respuestaIndex = respuesta;
+
+            const pregunta = preguntas[indicePreguntaActual];
+            const container = document.getElementById('pregunta-container');
+            preguntaRespondida = false;
+
+            let html = `
+                <div class="pregunta">
+                    <h3>Pregunta ${indicePreguntaActual + 1} de ${preguntas.length}</h3>
+                    <p class="pregunta-texto">${pregunta.pregunta}</p>
+                    <div class="opciones">
+            `;
+
+            if (pregunta.tipo === 'verdadero-falso') {
+                html += `
+                    <div class="opcion" onclick="seleccionarRespuesta(true)">
+                        <span class="letra">V</span>
+                        <span class="texto">Verdadero</span>
+                    </div>
+                    <div class="opcion" onclick="seleccionarRespuesta(false)">
+                        <span class="letra">F</span>
+                        <span class="texto">Falso</span>
+                    </div>
+                `;
             } else {
-                // Verdadero/Falso
-                esCorrecta = respuesta === pregunta.correcta;
-                respuestaIndex = respuesta === true ? 0 : 1;
+                pregunta.opciones.forEach((opcion, index) => {
+                    html += `
+                        <div class="opcion" onclick="seleccionarRespuesta(${index})">
+                            <span class="letra">${String.fromCharCode(65 + index)}</span>
+                            <span class="texto">${opcion}</span>
+                        </div>
+                    `;
+                });
             }
-            
-            if (esCorrecta) {
-                estadisticas.correctas++;
-                preguntaDiv.classList.add('correcta');
-                opciones[respuestaIndex].classList.add('correcta');
-            } else {
-                estadisticas.incorrectas++;
-                preguntaDiv.classList.add('incorrecta');
-                opciones[respuestaIndex].classList.add('incorrecta');
-                // Mostrar también la correcta
-                if (pregunta.tipo === 'multiple') {
-                    opciones[pregunta.correcta].classList.add('correcta');
-                } else {
-                    opciones[pregunta.correcta === true ? 0 : 1].classList.add('correcta');
+
+            html += `
+                    </div>
+                    <div id="feedback" class="feedback" style="display: none;"></div>
+                    <button id="siguiente-btn" class="btn-siguiente" onclick="siguientePregunta()" style="display: none;">
+                        Siguiente Pregunta →
+                    </button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            actualizarProgreso();
+        }
+
+        function seleccionarRespuesta(respuesta) {
+            if (preguntaRespondida) return;
+
+            const pregunta = preguntas[indicePreguntaActual];
+            const preguntaCard = document.querySelector('.pregunta');
+            const opciones = document.querySelectorAll('.opcion');
+            const feedback = document.getElementById('feedback');
+            const btnSiguiente = document.getElementById('siguiente-btn');
+
+            preguntaRespondida = true;
+
+            const esCorrecta = respuesta === pregunta.correcta;
+
+            opciones.forEach((opcion, index) => {
+                const valorOpcion = pregunta.tipo === 'verdadero-falso' 
+                    ? (index === 0 ? true : false) 
+                    : index;
+
+                if (valorOpcion === pregunta.correcta) {
+                    opcion.classList.add('correcta');
                 }
+                if (valorOpcion === respuesta && !esCorrecta) {
+                    opcion.classList.add('incorrecta');
+                }
+                opcion.style.pointerEvents = 'none';
+            });
+
+            if (esCorrecta) {
+                respuestasCorrectas++;
+                preguntaCard.classList.add('correcta');
+                feedback.className = 'feedback correcto';
+                feedback.innerHTML = `<strong>✓ ¡Correcto!</strong><p>${pregunta.explicacion}</p>`;
+            } else {
+                respuestasIncorrectas++;
+                preguntaCard.classList.add('incorrecta');
+                feedback.className = 'feedback incorrecto';
+                feedback.innerHTML = `<strong>✗ Incorrecto</strong><p>${pregunta.explicacion}</p>`;
             }
-            
-            // Marcar opción como seleccionada
-            opciones[respuestaIndex].classList.add('seleccionada');
-            
-            // Deshabilitar todas las opciones
-            opciones.forEach(opcion => opcion.classList.add('disabled'));
-            
-            // Mostrar explicación
-            document.getElementById(`explicacion-${preguntaIndex}`).classList.add('mostrar');
-            
-            // Actualizar estadísticas
+
+            feedback.style.display = 'block';
+            btnSiguiente.style.display = 'block';
             actualizarEstadisticas();
-            
-            // Verificar si completó el examen
-            if (estadisticas.respondidas === preguntas.length) {
-                setTimeout(mostrarResultadoFinal, 1000);
-            }
         }
-        
-        // Actualizar estadísticas visuales
+
+        function siguientePregunta() {
+            indicePreguntaActual++;
+            mostrarPregunta();
+        }
+
+        function actualizarProgreso() {
+            document.getElementById('pregunta-actual').textContent = indicePreguntaActual + 1;
+            const porcentaje = ((indicePreguntaActual + 1) / preguntas.length) * 100;
+            document.getElementById('progresoFill').style.width = porcentaje + '%';
+        }
+
         function actualizarEstadisticas() {
-            document.getElementById('pregunta-actual').textContent = estadisticas.respondidas;
-            document.getElementById('correctas-stat').textContent = estadisticas.correctas;
-            document.getElementById('incorrectas-stat').textContent = estadisticas.incorrectas;
-            
-            const porcentaje = (estadisticas.respondidas / preguntas.length) * 100;
-            const fill = document.getElementById('progresoFill');
-            fill.style.width = porcentaje + '%';
+            document.getElementById('correctas').textContent = respuestasCorrectas;
+            document.getElementById('incorrectas').textContent = respuestasIncorrectas;
         }
-        
-        // Mostrar resultado final
+
         function mostrarResultadoFinal() {
-            const porcentaje = Math.round((estadisticas.correctas / preguntas.length) * 100);
+            document.getElementById('pregunta-container').style.display = 'none';
+            const porcentaje = Math.round((respuestasCorrectas / preguntas.length) * 100);
             const resultadoDiv = document.getElementById('resultadoFinal');
             const porcentajeFinal = document.getElementById('porcentajeFinal');
             const mensajeFinal = document.getElementById('mensajeFinal');
             const iconoResultado = document.getElementById('iconoResultado');
-            
+
             porcentajeFinal.textContent = porcentaje + '%';
-            
+
             let mensaje = '';
             let icono = '';
-            
+
             if (porcentaje >= 90) {
                 mensaje = '¡Excelente! Dominas muy bien el tema del Primado de Pedro. 🌟';
                 icono = '🏆';
@@ -410,33 +386,32 @@
                 mensaje = 'Necesitas estudiar más el tema. Vuelve a la guía de estudio y practica nuevamente. 💪';
                 icono = '📝';
             }
-            
+
             mensajeFinal.textContent = mensaje;
             iconoResultado.textContent = icono;
             resultadoDiv.classList.add('mostrar');
-            
-            // Scroll al resultado
             resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        
-        // Reiniciar examen
+
         function reiniciarExamen() {
-            estadisticas = {
-                respondidas: 0,
-                correctas: 0,
-                incorrectas: 0
-            };
-            
+            indicePreguntaActual = 0;
+            respuestasCorrectas = 0;
+            respuestasIncorrectas = 0;
+            preguntaRespondida = false;
+
+            document.getElementById('pregunta-container').style.display = 'block';
             document.getElementById('resultadoFinal').classList.remove('mostrar');
-            actualizarEstadisticas();
-            renderizarPreguntas();
-            
+            document.getElementById('correctas').textContent = '0';
+            document.getElementById('incorrectas').textContent = '0';
+            document.getElementById('pregunta-actual').textContent = '1';
+            document.getElementById('progresoFill').style.width = '5%';
+
+            mostrarPregunta();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        // Inicializar al cargar la página
+
         window.onload = function() {
-            renderizarPreguntas();
+            mostrarPregunta();
         };
     </script>
 </body>
