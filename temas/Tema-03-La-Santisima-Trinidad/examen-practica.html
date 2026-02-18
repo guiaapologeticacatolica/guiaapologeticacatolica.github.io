@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema 3: La Santísima Trinidad - Examen de Práctica</title>
+    <link rel="stylesheet" href="../../css/styles-examen.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../../index.html" class="home-icon" title="Volver al Inicio">🏠</a>
+            <h1>✍️ Examen de Práctica</h1>
+            <p>Tema 3: La Santísima Trinidad</p>
+        </header>
+        
+        <div class="content">
+            <!-- INSTRUCCIONES -->
+            <div class="instrucciones">
+                <h3>📋 Instrucciones:</h3>
+                <ul>
+                    <li>Este examen consta de <strong>20 preguntas</strong> sobre la Santísima Trinidad</li>
+                    <li>Incluye 10 preguntas de opción múltiple y 10 de verdadero/falso</li>
+                    <li>Selecciona la respuesta que consideres correcta</li>
+                    <li>Recibirás retroalimentación inmediata con explicación detallada</li>
+                    <li>Al final verás tu calificación y podrás reintentar el examen</li>
+                </ul>
+            </div>
+
+            <!-- BARRA DE PROGRESO -->
+            <div class="progreso">
+                <div class="progreso-header">
+                    <span>Pregunta <span id="pregunta-actual">1</span> de 20</span>
+                    <span>Correctas: <span id="correctas">0</span> | Incorrectas: <span id="incorrectas">0</span></span>
+                </div>
+                <div class="progreso-barra">
+                    <div class="progreso-fill" id="progreso-fill"></div>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR DE PREGUNTAS -->
+            <div id="pregunta-container"></div>
+
+            <!-- RESULTADO FINAL -->
+            <div id="resultado-final" style="display: none;">
+                <h2>🎉 ¡Examen Completado!</h2>
+                <div class="resultado-stats">
+                    <div class="stat-box">
+                        <div class="stat-numero" id="final-correctas">0</div>
+                        <div class="stat-label">Correctas</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-numero" id="final-incorrectas">0</div>
+                        <div class="stat-label">Incorrectas</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-numero" id="final-porcentaje">0%</div>
+                        <div class="stat-label">Calificación</div>
+                    </div>
+                </div>
+                <div id="mensaje-final"></div>
+                <div class="botones-finales">
+                    <button onclick="reiniciarExamen()" class="btn-reiniciar">🔄 Reintentar Examen</button>
+                    <a href="guia-estudio.html" class="btn-volver">📖 Volver a la Guía</a>
+                    <a href="../../index.html" class="btn-inicio">🏠 Ir al Inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const preguntas = [
+            // Preguntas de Opción Múltiple (1-10)
+            {
+                pregunta: "¿Qué afirma la doctrina de la Santísima Trinidad?",
+                opciones: [
+                    "Que hay tres dioses diferentes",
+                    "Que Dios se manifiesta de tres formas diferentes",
+                    "Que hay un solo Dios en tres Personas distintas",
+                    "Que el Padre, Hijo y Espíritu Santo son partes de Dios"
+                ],
+                correcta: 2,
+                explicacion: "La Trinidad afirma que hay un solo Dios en tres Personas distintas (Padre, Hijo y Espíritu Santo), cada una plenamente Dios, compartiendo la misma naturaleza divina."
+            },
+            {
+                pregunta: "¿Cuál es el versículo del Antiguo Testamento que establece el monoteísmo judío?",
+                opciones: [
+                    "Génesis 1:1",
+                    "Deuteronomio 6:4 - 'El Señor nuestro Dios, el Señor uno es'",
+                    "Isaías 53:5",
+                    "Salmo 23:1"
+                ],
+                correcta: 1,
+                explicacion: "Deuteronomio 6:4 ('Shema Israel') establece claramente el monoteísmo: 'Escucha, Israel: El Señor, nuestro Dios, es el único Señor.'"
+            },
+            {
+                pregunta: "En Génesis 1:26, ¿qué indica el uso del plural 'Hagamos al hombre a nuestra imagen'?",
+                opciones: [
+                    "Que Dios hablaba con los ángeles",
+                    "Un indicio de pluralidad de Personas en la unidad divina",
+                    "Un error de traducción",
+                    "Que Dios hablaba consigo mismo como plural mayestático únicamente"
+                ],
+                correcta: 1,
+                explicacion: "El plural 'hagamos' y 'nuestra' en Génesis 1:26 sugiere pluralidad de Personas en la unidad divina, un indicio del misterio trinitario que sería revelado plenamente en el NT."
+            },
+            {
+                pregunta: "En Juan 1:1, ¿cómo describe el evangelista al Verbo (Jesucristo)?",
+                opciones: [
+                    "Como un profeta enviado por Dios",
+                    "Como el primer ser creado",
+                    "Como que 'el Verbo era con Dios, y el Verbo era Dios'",
+                    "Como un ángel poderoso"
+                ],
+                correcta: 2,
+                explicacion: "Juan 1:1 afirma claramente: 'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios', estableciendo la divinidad de Cristo."
+            },
+            {
+                pregunta: "¿Qué demostró Pedro en Hechos 5:3-4 al confrontar a Ananías?",
+                opciones: [
+                    "Que mentir a los apóstoles es grave",
+                    "Que el Espíritu Santo es una fuerza impersonal",
+                    "Que mentir al Espíritu Santo es mentir a Dios, probando su divinidad",
+                    "Que Ananías era un falso profeta"
+                ],
+                correcta: 2,
+                explicacion: "Pedro dice: '¿Por qué llenó Satanás tu corazón para que mintieses al Espíritu Santo?... No has mentido a los hombres, sino a Dios.' Esto prueba que el Espíritu Santo es Dios."
+            },
+            {
+                pregunta: "¿Cuál es la fórmula bautismal que Jesús ordenó en Mateo 28:19?",
+                opciones: [
+                    "Bautizar solo en el nombre de Jesús",
+                    "Bautizar en el nombre del Padre, y del Hijo, y del Espíritu Santo",
+                    "Bautizar en el nombre del Dios Todopoderoso",
+                    "Bautizar en el nombre de la Iglesia"
+                ],
+                correcta: 1,
+                explicacion: "Jesús ordena: 'Bautizándolos en el nombre (singular) del Padre, y del Hijo, y del Espíritu Santo', mostrando la unidad de las tres Personas divinas."
+            },
+            {
+                pregunta: "En el bautismo de Jesús (Mateo 3:16-17), ¿qué manifestación trinitaria ocurre?",
+                opciones: [
+                    "Solo Jesús está presente",
+                    "El Hijo es bautizado, el Espíritu desciende como paloma, y el Padre habla desde el cielo",
+                    "Los tres aparecen como una luz",
+                    "Solo se escucha la voz del Padre"
+                ],
+                correcta: 1,
+                explicacion: "En el bautismo de Jesús vemos las tres Personas simultáneamente: Jesús (Hijo) siendo bautizado, el Espíritu Santo descendiendo como paloma, y el Padre hablando desde el cielo."
+            },
+            {
+                pregunta: "Según el Catecismo 253, ¿cómo se relacionan las tres Personas divinas?",
+                opciones: [
+                    "Son tres partes que suman un Dios",
+                    "Son tres manifestaciones temporales de Dios",
+                    "Cada una de las tres Personas es enteramente Dios, compartiendo la misma naturaleza divina",
+                    "Son tres dioses que trabajan en unidad"
+                ],
+                correcta: 2,
+                explicacion: "El Catecismo enseña que 'las personas divinas no se reparten la única divinidad, sino que cada una de ellas es enteramente Dios', compartiendo la misma esencia divina."
+            },
+            {
+                pregunta: "¿Qué Padre de la Iglesia acuñó el término latino 'Trinitas' (Trinidad)?",
+                opciones: [
+                    "San Agustín",
+                    "San Atanasio",
+                    "Tertuliano (año 200 d.C.)",
+                    "San Jerónimo"
+                ],
+                correcta: 2,
+                explicacion: "Tertuliano, alrededor del año 200 d.C., fue el primero en usar el término latino 'Trinitas' para expresar la doctrina de un Dios en tres Personas."
+            },
+            {
+                pregunta: "Cuando Jesús dice en Juan 10:30 'Yo y el Padre uno somos', ¿qué está afirmando?",
+                opciones: [
+                    "Que tiene los mismos objetivos que el Padre",
+                    "Que es un mensajero del Padre",
+                    "Su unidad de naturaleza divina con el Padre",
+                    "Que es hijo adoptivo de Dios"
+                ],
+                correcta: 2,
+                explicacion: "Jesús afirma su unidad esencial con el Padre, compartiendo la misma naturaleza divina. Los judíos entendieron esto claramente como afirmación de divinidad (v. 33)."
+            },
+
+            // Preguntas Verdadero/Falso (11-20)
+            {
+                pregunta: "La Trinidad significa que hay tres dioses que trabajan juntos.",
+                tipo: "verdadero-falso",
+                correcta: false,
+                explicacion: "FALSO. La Trinidad no es triteísmo. Afirma que hay UN SOLO Dios en tres Personas distintas, no tres dioses. El monoteísmo se mantiene."
+            },
+            {
+                pregunta: "La palabra 'Trinidad' no aparece en la Biblia, pero la realidad que describe sí está revelada en la Escritura.",
+                tipo: "verdadero-falso",
+                correcta: true,
+                explicacion: "VERDADERO. Aunque la palabra 'Trinidad' no aparece textualmente, la realidad de un Dios en tres Personas está claramente revelada en el AT y NT."
+            },
+            {
+                pregunta: "El Espíritu Santo es solo una fuerza o energía de Dios, no una Persona.",
+                tipo: "verdadero-falso",
+                correcta: false,
+                explicacion: "FALSO. La Biblia atribuye al Espíritu Santo características personales: habla, enseña, intercede, tiene voluntad, puede ser contristado. Es una Persona divina."
+            },
+            {
+                pregunta: "Jesús afirmó explícitamente su divinidad diciendo 'Antes que Abraham fuese, yo soy' (Juan 8:58).",
+                tipo: "verdadero-falso",
+                correcta: true,
+                explicacion: "VERDADERO. Al usar 'Yo Soy' (el nombre divino de Éxodo 3:14), Jesús afirmó su eternidad y divinidad, por lo que los judíos intentaron apedrearlo por blasfemia."
+            },
+            {
+                pregunta: "La doctrina de la Trinidad fue inventada por el Concilio de Nicea en el año 325 d.C.",
+                tipo: "verdadero-falso",
+                correcta: false,
+                explicacion: "FALSO. Nicea no inventó la Trinidad, sino que definió dogmáticamente lo que la Iglesia siempre creyó. Los Padres Apostólicos ya la enseñaban en los siglos I-II."
+            },
+            {
+                pregunta: "Cuando Jesús dice 'el Padre mayor es que yo' (Juan 14:28), se refiere a su naturaleza humana durante la encarnación.",
+                tipo: "verdadero-falso",
+                correcta: true,
+                explicacion: "VERDADERO. En cuanto Dios, Cristo es igual al Padre (Jn 10:30). En cuanto hombre, se hizo menor para nuestra salvación (Flp 2:6-8). Este texto afirma su verdadera humanidad."
+            },
+            {
+                pregunta: "El Antiguo Testamento no contiene ningún indicio de la Trinidad.",
+                tipo: "verdadero-falso",
+                correcta: false,
+                explicacion: "FALSO. Aunque la revelación plena viene con Cristo, hay indicios en el AT: Génesis 1:26 ('Hagamos'), Génesis 18:1-2 (tres visitantes), Isaías 48:16, entre otros."
+            },
+            {
+                pregunta: "Según Colosenses 2:9, en Cristo 'habita corporalmente toda la plenitud de la Deidad'.",
+                tipo: "verdadero-falso",
+                correcta: true,
+                explicacion: "VERDADERO. Este versículo afirma claramente la plena divinidad de Cristo: toda la plenitud de la naturaleza divina habita en Él corporalmente."
+            },
+            {
+                pregunta: "Las tres Personas divinas son simplemente tres formas en que Dios se manifiesta temporalmente.",
+                tipo: "verdadero-falso",
+                correcta: false,
+                explicacion: "FALSO. Esto es la herejía del modalismo (o sabelianismo). Las tres Personas son eternamente distintas, no meras manifestaciones temporales. El Padre, Hijo y Espíritu Santo existen simultáneamente."
+            },
+            {
+                pregunta: "La Trinidad es un misterio que supera la razón humana pero no la contradice.",
+                tipo: "verdadero-falso",
+                correcta: true,
+                explicacion: "VERDADERO. La Trinidad es un misterio que no podemos comprender plenamente con nuestra razón finita, pero no es una contradicción lógica. Es tres 'quiénes' en un 'qué'."
+            }
+        ];
+
+        let indicePreguntaActual = 0;
+        let respuestasCorrectas = 0;
+        let respuestasIncorrectas = 0;
+        let preguntaRespondida = false;
+
+        function mostrarPregunta() {
+            if (indicePreguntaActual >= preguntas.length) {
+                mostrarResultadoFinal();
+                return;
+            }
+
+            const pregunta = preguntas[indicePreguntaActual];
+            const container = document.getElementById('pregunta-container');
+            preguntaRespondida = false;
+
+            let html = `
+                <div class="pregunta">
+                    <h3>Pregunta ${indicePreguntaActual + 1}</h3>
+                    <p class="pregunta-texto">${pregunta.pregunta}</p>
+                    <div class="opciones">
+            `;
+
+            if (pregunta.tipo === 'verdadero-falso') {
+                html += `
+                    <div class="opcion" onclick="seleccionarRespuesta(true)">
+                        <span class="letra">V</span>
+                        <span class="texto">Verdadero</span>
+                    </div>
+                    <div class="opcion" onclick="seleccionarRespuesta(false)">
+                        <span class="letra">F</span>
+                        <span class="texto">Falso</span>
+                    </div>
+                `;
+            } else {
+                pregunta.opciones.forEach((opcion, index) => {
+                    html += `
+                        <div class="opcion" onclick="seleccionarRespuesta(${index})">
+                            <span class="letra">${String.fromCharCode(65 + index)}</span>
+                            <span class="texto">${opcion}</span>
+                        </div>
+                    `;
+                });
+            }
+
+            html += `
+                    </div>
+                    <div id="feedback" class="feedback" style="display: none;"></div>
+                    <button id="siguiente-btn" class="btn-siguiente" onclick="siguientePregunta()" style="display: none;">
+                        Siguiente Pregunta →
+                    </button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            actualizarProgreso();
+        }
+
+        function seleccionarRespuesta(respuesta) {
+            if (preguntaRespondida) return;
+
+            const pregunta = preguntas[indicePreguntaActual];
+            const opciones = document.querySelectorAll('.opcion');
+            const feedback = document.getElementById('feedback');
+            const btnSiguiente = document.getElementById('siguiente-btn');
+
+            preguntaRespondida = true;
+
+            const esCorrecta = respuesta === pregunta.correcta;
+
+            opciones.forEach((opcion, index) => {
+                const valorOpcion = pregunta.tipo === 'verdadero-falso' 
+                    ? (index === 0 ? true : false) 
+                    : index;
+
+                if (valorOpcion === pregunta.correcta) {
+                    opcion.classList.add('correcta');
+                }
+                if (valorOpcion === respuesta && !esCorrecta) {
+                    opcion.classList.add('incorrecta');
+                }
+                opcion.style.pointerEvents = 'none';
+            });
+
+            if (esCorrecta) {
+                respuestasCorrectas++;
+                feedback.className = 'feedback correcto';
+                feedback.innerHTML = `<strong>✓ ¡Correcto!</strong><p>${pregunta.explicacion}</p>`;
+            } else {
+                respuestasIncorrectas++;
+                feedback.className = 'feedback incorrecto';
+                feedback.innerHTML = `<strong>✗ Incorrecto</strong><p>${pregunta.explicacion}</p>`;
+            }
+
+            feedback.style.display = 'block';
+            btnSiguiente.style.display = 'block';
+            actualizarEstadisticas();
+        }
+
+        function siguientePregunta() {
+            indicePreguntaActual++;
+            mostrarPregunta();
+        }
+
+        function actualizarProgreso() {
+            document.getElementById('pregunta-actual').textContent = indicePreguntaActual + 1;
+            const porcentaje = ((indicePreguntaActual + 1) / preguntas.length) * 100;
+            document.getElementById('progreso-fill').style.width = porcentaje + '%';
+        }
+
+        function actualizarEstadisticas() {
+            document.getElementById('correctas').textContent = respuestasCorrectas;
+            document.getElementById('incorrectas').textContent = respuestasIncorrectas;
+        }
+
+        function mostrarResultadoFinal() {
+            document.getElementById('pregunta-container').style.display = 'none';
+            document.querySelector('.progreso').style.display = 'none';
+
+            const porcentaje = Math.round((respuestasCorrectas / preguntas.length) * 100);
+
+            document.getElementById('final-correctas').textContent = respuestasCorrectas;
+            document.getElementById('final-incorrectas').textContent = respuestasIncorrectas;
+            document.getElementById('final-porcentaje').textContent = porcentaje + '%';
+
+            const mensajeFinal = document.getElementById('mensaje-final');
+            if (porcentaje >= 90) {
+                mensajeFinal.innerHTML = '<p class="excelente">🌟 ¡Excelente! Tienes un dominio sobresaliente del misterio de la Santísima Trinidad.</p>';
+            } else if (porcentaje >= 70) {
+                mensajeFinal.innerHTML = '<p class="bueno">👍 ¡Buen trabajo! Comprendes bien la doctrina trinitaria.</p>';
+            } else if (porcentaje >= 50) {
+                mensajeFinal.innerHTML = '<p class="regular">📖 Bien, pero te recomendamos repasar la guía de estudio.</p>';
+            } else {
+                mensajeFinal.innerHTML = '<p class="necesita-mejorar">📚 Te recomendamos estudiar nuevamente el tema antes de continuar.</p>';
+            }
+
+            document.getElementById('resultado-final').style.display = 'block';
+        }
+
+        function reiniciarExamen() {
+            indicePreguntaActual = 0;
+            respuestasCorrectas = 0;
+            respuestasIncorrectas = 0;
+            preguntaRespondida = false;
+
+            document.getElementById('pregunta-container').style.display = 'block';
+            document.querySelector('.progreso').style.display = 'block';
+            document.getElementById('resultado-final').style.display = 'none';
+
+            actualizarEstadisticas();
+            mostrarPregunta();
+        }
+
+        // Inicializar
+        window.onload = function() {
+            mostrarPregunta();
+        };
+    </script>
+</body>
+</html>
