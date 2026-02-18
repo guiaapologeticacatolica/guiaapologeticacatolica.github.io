@@ -431,29 +431,11 @@ header h1 {
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
-.btn-volver {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.btn-inicio {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-/* Contenedor de botones finales (para resultado) */
-.botones-finales {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
-    flex-wrap: wrap;
-}
-
 /* ================================================
    RESULTADO FINAL
    ================================================ */
 
-.resultado-final,
-#resultado-final {
+.resultado-final {
     background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
     border-radius: 15px;
     padding: 40px;
@@ -462,8 +444,7 @@ header h1 {
     display: none;
 }
 
-.resultado-final.mostrar,
-#resultado-final.mostrar {
+.resultado-final.mostrar {
     display: block;
     animation: fadeIn 0.5s ease;
 }
@@ -477,61 +458,6 @@ header h1 {
     font-size: 2.5em;
     margin-bottom: 20px;
     color: #333;
-}
-
-.resultado-stats {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin: 30px 0;
-    flex-wrap: wrap;
-}
-
-.stat-box {
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 10px;
-    padding: 20px 30px;
-    min-width: 120px;
-}
-
-.stat-numero {
-    font-size: 3em;
-    font-weight: bold;
-    color: #2196F3;
-    margin-bottom: 5px;
-}
-
-#mensaje-final {
-    font-size: 1.3em;
-    color: #555;
-    margin: 20px 0;
-    font-weight: 500;
-}
-
-#mensaje-final p {
-    padding: 15px;
-    border-radius: 8px;
-    margin: 10px 0;
-}
-
-#mensaje-final .excelente {
-    background: rgba(76, 175, 80, 0.2);
-    color: #2e7d32;
-}
-
-#mensaje-final .bueno {
-    background: rgba(33, 150, 243, 0.2);
-    color: #1565c0;
-}
-
-#mensaje-final .regular {
-    background: rgba(255, 152, 0, 0.2);
-    color: #e65100;
-}
-
-#mensaje-final .necesita-mejorar {
-    background: rgba(244, 67, 54, 0.2);
-    color: #c62828;
 }
 
 .resultado-porcentaje {
