@@ -29,23 +29,12 @@
             
             <!-- PROGRESO -->
             <div class="progreso">
-                <h3>📊 Tu Progreso</h3>
-                <div class="progreso-bar">
-                    <div class="progreso-fill" id="progresoFill">0%</div>
+                <div class="progreso-header">
+                    <span>Pregunta <span id="pregunta-actual">0</span> de 20</span>
+                    <span>Correctas: <span id="correctas-stat">0</span> | Incorrectas: <span id="incorrectas-stat">0</span></span>
                 </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-number" id="respondidas">0</div>
-                        <div class="stat-label">Respondidas</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="correctas-stat" style="color: #4CAF50;">0</div>
-                        <div class="stat-label">Correctas</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="incorrectas-stat" style="color: #f44336;">0</div>
-                        <div class="stat-label">Incorrectas</div>
-                    </div>
+                <div class="progreso-barra">
+                    <div class="progreso-fill" id="progresoFill"></div>
                 </div>
             </div>
             
@@ -386,14 +375,13 @@
         
         // Actualizar estadísticas visuales
         function actualizarEstadisticas() {
-            document.getElementById('respondidas').textContent = estadisticas.respondidas;
+            document.getElementById('pregunta-actual').textContent = estadisticas.respondidas;
             document.getElementById('correctas-stat').textContent = estadisticas.correctas;
             document.getElementById('incorrectas-stat').textContent = estadisticas.incorrectas;
             
             const porcentaje = (estadisticas.respondidas / preguntas.length) * 100;
             const fill = document.getElementById('progresoFill');
             fill.style.width = porcentaje + '%';
-            fill.textContent = Math.round(porcentaje) + '%';
         }
         
         // Mostrar resultado final

@@ -103,6 +103,22 @@ header h1 {
     margin-bottom: 30px;
 }
 
+.progreso-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    color: #666;
+}
+
+.progreso-barra {
+    background: #e0e0e0;
+    height: 25px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
 .progreso-bar {
     background: #e0e0e0;
     height: 30px;
@@ -178,12 +194,16 @@ header h1 {
     margin-bottom: 15px;
 }
 
+.pregunta h3 {
+    color: #555;
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
 .pregunta-numero {
-    background: #2196F3;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
+    color: #555;
+    font-weight: 600;
 }
 
 .pregunta-tipo {

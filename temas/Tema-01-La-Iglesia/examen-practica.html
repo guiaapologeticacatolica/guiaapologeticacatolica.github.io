@@ -29,23 +29,12 @@
             
             <!-- PROGRESO -->
             <div class="progreso">
-                <h3>📊 Tu Progreso</h3>
-                <div class="progreso-bar">
-                    <div class="progreso-fill" id="progresoFill">0%</div>
+                <div class="progreso-header">
+                    <span>Pregunta <span id="pregunta-actual">0</span> de 20</span>
+                    <span>Correctas: <span id="correctas">0</span> | Incorrectas: <span id="incorrectas">0</span></span>
                 </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-number" id="respondidas">0</div>
-                        <div class="stat-label">Respondidas</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="correctas" style="color: #4CAF50;">0</div>
-                        <div class="stat-label">Correctas</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="incorrectas" style="color: #f44336;">0</div>
-                        <div class="stat-label">Incorrectas</div>
-                    </div>
+                <div class="progreso-barra">
+                    <div class="progreso-fill" id="progresoFill"></div>
                 </div>
             </div>
             
@@ -289,13 +278,8 @@
                 preguntaDiv.className = 'pregunta';
                 preguntaDiv.id = `pregunta-${index}`;
                 
-                const tipoLabel = pregunta.tipo === 'multiple' ? '📝 Opción Múltiple' : '✓ Verdadero/Falso';
-                
                 preguntaDiv.innerHTML = `
-                    <div class="pregunta-header">
-                        <span class="pregunta-numero">Pregunta ${index + 1}</span>
-                        <span class="pregunta-tipo">${tipoLabel}</span>
-                    </div>
+                    <h3>Pregunta ${index + 1} de ${preguntas.length}</h3>
                     <div class="pregunta-texto">${pregunta.pregunta}</div>
                     <div class="opciones" id="opciones-${index}">
                         ${pregunta.opciones.map((opcion, i) => `
@@ -365,14 +349,13 @@
         
         // Actualizar estadísticas visuales
         function actualizarEstadisticas() {
-            document.getElementById('respondidas').textContent = estadisticas.respondidas;
+            document.getElementById('pregunta-actual').textContent = estadisticas.respondidas;
             document.getElementById('correctas').textContent = estadisticas.correctas;
             document.getElementById('incorrectas').textContent = estadisticas.incorrectas;
             
             const porcentaje = (estadisticas.respondidas / preguntas.length) * 100;
             const fill = document.getElementById('progresoFill');
             fill.style.width = porcentaje + '%';
-            fill.textContent = Math.round(porcentaje) + '%';
         }
         
         // Mostrar resultado final
