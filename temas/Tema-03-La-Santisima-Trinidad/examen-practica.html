@@ -40,29 +40,17 @@
 
             <!-- CONTENEDOR DE PREGUNTAS -->
             <div id="pregunta-container"></div>
-
+            
             <!-- RESULTADO FINAL -->
-            <div id="resultado-final" style="display: none;">
-                <h2>🎉 ¡Examen Completado!</h2>
-                <div class="resultado-stats">
-                    <div class="stat-box">
-                        <div class="stat-numero" id="final-correctas">0</div>
-                        <div class="stat-label">Correctas</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-numero" id="final-incorrectas">0</div>
-                        <div class="stat-label">Incorrectas</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-numero" id="final-porcentaje">0%</div>
-                        <div class="stat-label">Calificación</div>
-                    </div>
-                </div>
-                <div id="mensaje-final"></div>
-                <div class="botones-finales">
-                    <button onclick="reiniciarExamen()" class="btn-reiniciar">🔄 Reintentar Examen</button>
-                    <a href="guia-estudio.html" class="btn-volver">📖 Volver a la Guía</a>
-                    <a href="../../index.html" class="btn-inicio">🏠 Ir al Inicio</a>
+            <div class="resultado-final" id="resultadoFinal">
+                <div class="icono-resultado" id="iconoResultado">🎉</div>
+                <h2>¡Examen Completado!</h2>
+                <div class="resultado-porcentaje" id="porcentajeFinal">0%</div>
+                <div class="resultado-mensaje" id="mensajeFinal"></div>
+                <div class="botones-control">
+                    <button class="btn btn-reiniciar" onclick="reiniciarExamen()">🔄 Reiniciar Examen</button>
+                    <a href="guia-estudio.html" class="btn btn-guia">📖 Volver a la Guía</a>
+                    <a href="../../index.html" class="btn">🏠 Inicio</a>
                 </div>
             </div>
         </div>
@@ -364,26 +352,35 @@
 
         function mostrarResultadoFinal() {
             document.getElementById('pregunta-container').style.display = 'none';
-            document.querySelector('.progreso').style.display = 'none';
-
             const porcentaje = Math.round((respuestasCorrectas / preguntas.length) * 100);
+            const resultadoDiv = document.getElementById('resultadoFinal');
+            const porcentajeFinal = document.getElementById('porcentajeFinal');
+            const mensajeFinal = document.getElementById('mensajeFinal');
+            const iconoResultado = document.getElementById('iconoResultado');
 
-            document.getElementById('final-correctas').textContent = respuestasCorrectas;
-            document.getElementById('final-incorrectas').textContent = respuestasIncorrectas;
-            document.getElementById('final-porcentaje').textContent = porcentaje + '%';
+            porcentajeFinal.textContent = porcentaje + '%';
 
-            const mensajeFinal = document.getElementById('mensaje-final');
+            let mensaje = '';
+            let icono = '';
+
             if (porcentaje >= 90) {
-                mensajeFinal.innerHTML = '<p class="excelente">🌟 ¡Excelente! Tienes un dominio sobresaliente del misterio de la Santísima Trinidad.</p>';
-            } else if (porcentaje >= 70) {
-                mensajeFinal.innerHTML = '<p class="bueno">👍 ¡Buen trabajo! Comprendes bien la doctrina trinitaria.</p>';
-            } else if (porcentaje >= 50) {
-                mensajeFinal.innerHTML = '<p class="regular">📖 Bien, pero te recomendamos repasar la guía de estudio.</p>';
+                mensaje = '¡Excelente! Dominas muy bien el misterio de la Santísima Trinidad. 🌟';
+                icono = '🏆';
+            } else if (porcentaje >= 75) {
+                mensaje = '¡Muy bien! Tienes un buen conocimiento del tema. Repasa las preguntas incorrectas. 👏';
+                icono = '⭐';
+            } else if (porcentaje >= 60) {
+                mensaje = 'Buen esfuerzo. Te recomendamos repasar la guía de estudio y volver a intentarlo. 📚';
+                icono = '📖';
             } else {
-                mensajeFinal.innerHTML = '<p class="necesita-mejorar">📚 Te recomendamos estudiar nuevamente el tema antes de continuar.</p>';
+                mensaje = 'Necesitas estudiar más el tema. Vuelve a la guía de estudio y practica nuevamente. 💪';
+                icono = '📝';
             }
 
-            document.getElementById('resultado-final').style.display = 'block';
+            mensajeFinal.textContent = mensaje;
+            iconoResultado.textContent = icono;
+            resultadoDiv.classList.add('mostrar');
+            resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function reiniciarExamen() {
@@ -393,10 +390,12 @@
             preguntaRespondida = false;
 
             document.getElementById('pregunta-container').style.display = 'block';
-            document.querySelector('.progreso').style.display = 'block';
-            document.getElementById('resultado-final').style.display = 'none';
+            document.getElementById('resultadoFinal').classList.remove('mostrar');
+            document.getElementById('correctas').textContent = '0';
+            document.getElementById('incorrectas').textContent = '0';
+            document.getElementById('pregunta-actual').textContent = '1';
+            document.getElementById('progreso-fill').style.width = '5%';
 
-            actualizarEstadisticas();
             mostrarPregunta();
         }
 
