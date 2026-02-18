@@ -306,6 +306,7 @@
             if (preguntaRespondida) return;
 
             const pregunta = preguntas[indicePreguntaActual];
+            const preguntaCard = document.querySelector('.pregunta');
             const opciones = document.querySelectorAll('.opcion');
             const feedback = document.getElementById('feedback');
             const btnSiguiente = document.getElementById('siguiente-btn');
@@ -330,10 +331,12 @@
 
             if (esCorrecta) {
                 respuestasCorrectas++;
+                preguntaCard.classList.add('correcta');
                 feedback.className = 'feedback correcto';
                 feedback.innerHTML = `<strong>✓ ¡Correcto!</strong><p>${pregunta.explicacion}</p>`;
             } else {
                 respuestasIncorrectas++;
+                preguntaCard.classList.add('incorrecta');
                 feedback.className = 'feedback incorrecto';
                 feedback.innerHTML = `<strong>✗ Incorrecto</strong><p>${pregunta.explicacion}</p>`;
             }
