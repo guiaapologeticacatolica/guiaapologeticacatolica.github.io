@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#2c3e50">
+  <!-- Cruz superior -->
+  <rect x="30" y="2" width="4" height="8" fill="#2c3e50"/>
+  <rect x="27" y="5" width="10" height="4" fill="#2c3e50"/>
+  
+  <!-- Torre/campanario -->
+  <rect x="24" y="10" width="16" height="20" rx="2" fill="#2c3e50"/>
+  
+  <!-- Ventanas del campanario -->
+  <rect x="27" y="14" width="4" height="8" rx="2" fill="#fff"/>
+  <rect x="33" y="14" width="4" height="8" rx="2" fill="#fff"/>
+  
+  <!-- Campana -->
+  <circle cx="32" cy="24" r="3" fill="#fff"/>
+  
+  <!-- Cuerpo principal de la iglesia -->
+  <rect x="10" y="30" width="44" height="32" fill="#2c3e50"/>
+  
+  <!-- Puerta principal (arco) -->
+  <path d="M 26 62 L 26 46 Q 26 42 32 42 Q 38 42 38 46 L 38 62 Z" fill="#34495e"/>
+  
+  <!-- Ventanas laterales -->
+  <rect x="14" y="36" width="6" height="10" rx="3" fill="#fff"/>
+  <rect x="44" y="36" width="6" height="10" rx="3" fill="#fff"/>
+  
+  <!-- Base -->
+  <rect x="10" y="58" width="44" height="4" fill="#34495e"/>
+</svg>
